@@ -2,25 +2,25 @@ package sample;
 
 /**
  * Created by Eugene13 on 05.10.2016.
+ * Class Spline:
+ * 1) Реализована основная логика аппроксимации методом кубических сплайнов;
+ * 2) Коэффициенты для каждого сплайна между заранее определенными узлами
+ * хранятся в массиве splines.
  */
+
 class Spline extends Method {
-    private SplineTuple[] splines; // Сплайн
+    private SplineTuple[] splines;
 
     void BuildSpline(double[] x, double[] y, int n) {
-        // Инициализация массива сплайнов
         splines = new SplineTuple[n];
         for (int i = 0; i < n; i++) {
             splines[i] = new SplineTuple();
         }
-
         for (int i = 0; i < n; ++i) {
             splines[i].x = x[i];
             splines[i].a = y[i];
         }
         splines[0].c = splines[n - 1].c = 0.0;
-
-        // Решение СЛАУ относительно коэффициентов сплайнов c[i] методом прогонки для трехдиагональных матриц
-        // Вычисление прогоночных коэффициентов - прямой ход метода прогонки
         double[] alpha = new double[n - 1];
         double[] beta = new double[n - 1];
         alpha[0] = beta[0] = 0.0;
@@ -34,16 +34,10 @@ class Spline extends Method {
             alpha[i] = -B / z;
             beta[i] = (F - A * beta[i - 1]) / z;
         }
-
-        // Нахождение решения - обратный ход метода прогонки
         for (int i = n - 2; i > 0; --i)
             splines[i].c = alpha[i] * splines[i + 1].c + beta[i];
-
-        // Освобождение памяти, занимаемой прогоночными коэффициентами
         beta = null;
         alpha = null;
-
-        // По известным коэффициентам c[i] находим значения b[i] и d[i]
         for (int i = n - 1; i > 0; --i) {
             double h_i = x[i] - x[i - 1];
             splines[i].d = (splines[i].c - splines[i - 1].c) / h_i;
@@ -51,17 +45,14 @@ class Spline extends Method {
         }
     }
 
-    // Вычисление значения интерполированной функции в произвольной точке
     double f(double x) {
         SplineTuple s;
         int n = splines.length;
-        //BuildSpline(myx,y,n);
-        if (x <= splines[0].x) // Если x меньше точки сетки x[0] - пользуемся первым эл-тов массива
+        if (x <= splines[0].x)
             s = splines[1];
-        else if (x >= splines[n - 1].x) // Если x больше точки сетки x[n - 1] - пользуемся последним эл-том массива
+        else if (x >= splines[n - 1].x)
             s = splines[n - 1];
-        else // Иначе x лежит между граничными точками сетки - производим бинарный поиск нужного эл-та массива
-        {
+        else {
             int i = 0, j = n - 1;
             while (i + 1 < j) {
                 int k = i + (j - i) / 2;
@@ -72,9 +63,7 @@ class Spline extends Method {
             }
             s = splines[j];
         }
-
         double dx = (x - s.x);
-        // Вычисляем значение сплайна в заданной точке по схеме Горнера (в принципе, "умный" компилятор применил бы схему Горнера сам, но ведь не все так умны, как кажутся)
         return s.a + (s.b + (s.c / 2.0 + s.d * dx / 6.0) * dx) * dx;
     }
 }

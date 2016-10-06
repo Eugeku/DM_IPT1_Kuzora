@@ -2,7 +2,10 @@ package sample;
 
 /**
  * Created by Eugene13 on 05.10.2016.
+ * Class Lagran:
+ * 1) Реализована логика аппроксимации функции методом полинома Лагранжа;
  */
+
 class Lagran extends Method {
     double solution(Data data, double apx) {
         double valueFapx = 0;

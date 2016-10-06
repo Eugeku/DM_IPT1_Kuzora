@@ -2,24 +2,17 @@ package sample;
 
 /**
  * Created by Eugene13 on 03.10.2016.
+ * Class Data:
+ * 1) Значения х и y;
  */
 
 class Data {
     private int n;
     private double[] vectorX;
     private double[] vectorY;
-    private double aproxFx;
 
     int getN() {
         return n;
-    }
-
-    double getAproxFx() {
-        return this.aproxFx;
-    }
-
-    void setAproxFx(double fx) {
-        this.aproxFx = fx;
     }
 
     void setN(int n) {

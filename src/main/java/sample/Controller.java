@@ -11,7 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-
 public class Controller {
     @FXML
     RadioButton radioButton1, radioButton2;
@@ -27,11 +26,9 @@ public class Controller {
     TextArea textArea;
     @FXML
     Canvas canvas;
-
     private Data data = new Data();
     private int count = 0;
     private String stringTextFlow = "";
-
 
     public void sellectMethod1(ActionEvent event) {
         if (radioButton1.isSelected()) {
@@ -110,7 +107,6 @@ public class Controller {
             double l;
             try {
                 l = lagran.solution(data, Double.parseDouble(textField2.getText()));
-                System.out.println(l);
             } catch (Exception e) {
                 label1.setText("Повторите ввод x");
             }
@@ -122,7 +118,6 @@ public class Controller {
             spline.BuildSpline(data.getVectorX(), data.getVectorY(), data.getN());
             try {
                 double l = spline.f(Double.parseDouble(textField2.getText()));
-                System.out.println(l);
             } catch (Exception e) {
                 label1.setText("Повторите ввод x");
             }
@@ -140,9 +135,11 @@ public class Controller {
         hBox.setDisable(false);
         button2.setDisable(true);
         textField.setPromptText("");
+        GraphicsContext gr = canvas.getGraphicsContext2D();
+        gr.clearRect(0, 0, 230, 260);
     }
 
-    void draw() {
+    private void draw() {
         GraphicsContext gr = canvas.getGraphicsContext2D();
         double[] vecX = data.getVectorX();
         double[] vecY = data.getVectorY();
@@ -151,7 +148,7 @@ public class Controller {
         gr.setStroke(Color.BLACK);
         gr.strokeLine(0, 130, 230, 130);
         gr.strokeLine(115, 0, 115, 260);
-        gr.setFont(new Font(6));
+        gr.setFont(new Font(8));
         gr.fillText("0", 116, 129);
         gr.fillText("x", 225, 135);
         gr.fillText("y", 116, 5);
@@ -188,6 +185,25 @@ public class Controller {
                     prevY = y;
                 }
             }
+            try {
+                if (!textField2.getText().equals("") & (Double.parseDouble(textField2.getText())) >= vecX[0] & (Double.parseDouble(textField2.getText())) <= vecX[n - 1]) {
+                    try {
+                        double x = Double.parseDouble(textField2.getText());
+                        double y = lagran.solution(data, x);
+                        gr.setStroke(Color.BROWN);
+                        gr.strokeLine(115 + x * scaleX, 130, 115 + x * scaleX, 130 - y * scaleY);
+                        gr.strokeLine(115, 130 - y * scaleY, 115 + x * scaleX, 130 - y * scaleY);
+                        gr.setFont(new Font(6));
+                        gr.setStroke(Color.DARKGRAY);
+                        gr.fillText(String.format("%2.2f", x), 115 + x * scaleX, 129);
+                        gr.fillText(String.format("%2.2f", y), 116, 128 - y * scaleY);
+                        gr.setFont(new Font(10));
+                        gr.fillText(String.format("х=%2.3f, F(x)=%2.3f", x, y), 5, 250);
+                    } catch (Exception e) {
+                    }
+                }
+            } catch (Exception e) {
+            }
         } else if (radioButton2.isSelected()) {
             Spline spline = new Spline();
             spline.BuildSpline(vecX, vecY, n);
@@ -222,8 +238,26 @@ public class Controller {
                     prevY = y;
                 }
             }
+            try {
+                if (!textField2.getText().equals("") & (Double.parseDouble(textField2.getText())) >= vecX[0] & (Double.parseDouble(textField2.getText())) <= vecX[n - 1]) {
+                    try {
+                        double x = Double.parseDouble(textField2.getText());
+                        double y = spline.f(x);
+                        gr.setStroke(Color.BROWN);
+                        gr.strokeLine(115 + x * scaleX, 130, 115 + x * scaleX, 130 - y * scaleY);
+                        gr.strokeLine(115, 130 - y * scaleY, 115 + x * scaleX, 130 - y * scaleY);
+                        gr.setFont(new Font(6));
+                        gr.setStroke(Color.DARKGRAY);
+                        gr.fillText(String.format("%2.2f", x), 115 + x * scaleX, 129);
+                        gr.fillText(String.format("%2.2f", y), 116, 128 - y * scaleY);
+                        gr.setFont(new Font(10));
+                        gr.fillText(String.format("х=%2.3f, F(x)=%2.3f", x, y), 5, 250);
+                    } catch (Exception e) {
+                    }
+                }
+            } catch (Exception e) {
+            }
         } else {
-
         }
     }
 }

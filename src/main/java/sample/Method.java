@@ -2,7 +2,11 @@ package sample;
 
 /**
  * Created by Eugene13 on 04.10.2016.
+ * Class Method:
+ * 1) Родительский класс для классов Spline и Lagran;
+ * 2) Реализована логика сортировки значений ("Bubble" sort)
  */
+
 class Method {
     void sort(Data data) {
         int countNodes = data.getN();
