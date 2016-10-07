@@ -260,7 +260,4 @@ public class Controller {
         } else {
         }
     }
-
-    private void draw2() {
-    }
 }
