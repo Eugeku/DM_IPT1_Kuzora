@@ -1,0 +1,12 @@
+*.class
+*.html
+*.png
+target/site/images/icon_warning_sml.gif
+*.gif
+target/site/css/site.css
+*.css
+target/maven-archiver/pom.properties
+*.xml
+*.fxml
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+*.lst
